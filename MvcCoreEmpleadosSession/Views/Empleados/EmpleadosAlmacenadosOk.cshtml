@@ -16,6 +16,24 @@
 }
 else
 {
+    <table>
+        @foreach (Empleado emp in Model){
+            <tr>
+                <td> @emp.Apellido</td>
+                <td> @emp.Oficio</td>
+                <td> @emp.Salario</td>
+                <td>
+                    <a asp-controller="Empleados"
+                       asp-action="EmpleadosAlmacenadosOk"
+                       asp-route-ideliminar=" @emp.IdEmpleado"
+                       class="btn btn-danger">
+                        Eliminar!
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+
     <ul class="list-group">
         @foreach (Empleado emp in Model)
         {

@@ -109,7 +109,7 @@ namespace MvcCoreEmpleadosSession.Controllers
                 ViewData["MENSAJE"] = "Empleado almacenado correctamente";
             }
 
-            //comprobamos si hay algo en session
+            /*comprobamos si hay algo en session
             List<int> ids = HttpContext.Session.GetObject<List<int>>("IDSEMPLEADOS");
             if (ids == null)
             {
@@ -122,11 +122,13 @@ namespace MvcCoreEmpleadosSession.Controllers
                 List<Empleado> empleados = await
                     this.repo.GetEmpleadosNotSessionAsync(ids);
                 return View(empleados);
-            }
-                
+            }*/
+            List<Empleado> empleados = await
+                this.repo.GetEmpleadosAsync();
+            return View(empleados);
         }
 
-        public async Task<IActionResult> EmpleadosAlmacenadosOk()
+        public async Task<IActionResult> EmpleadosAlmacenadosOk(int? ideliminar)
         {
             //recuperamos los empleados de session
             List<int> ids =
@@ -134,6 +136,24 @@ namespace MvcCoreEmpleadosSession.Controllers
 
             if (ids != null)
             {
+                //debemos eliminar de session
+                if(ideliminar != null)
+                {
+                    //nos han enviado dato para borrar
+                    ids.Remove(ideliminar.Value);
+
+                    if (ids.Count() == 0)
+                    {
+                        HttpContext.Session.Remove("IDSEMPLEADOS");
+                    }
+                    else
+                    {
+                        //almacenamos de nuevo los datos de session 
+                        HttpContext.Session.SetObject("IDSEMPLEADOS", ids);
+                    }
+                    
+                }
+
                 List<Empleado> empleados = await
                this.repo.GetEmpleadosSessionAsync(ids);
                 return View(empleados);

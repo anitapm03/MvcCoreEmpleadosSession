@@ -1,5 +1,10 @@
 ﻿@model List<Empleado>
 
+@{
+    List<int> ids =
+            Context.Session.GetObject<List<int>>("IDSEMPLEADOS");
+}
+
 <h1>Almacenar obj Empleado en session</h1>
 
 <h2>@ViewData["MENSAJE"]</h2>
@@ -13,14 +18,34 @@
 <ul class="list-group">
     @foreach (Empleado emp in Model)
     {
-        <li class="list-group-item">
+        <li class="list-group-item list-group-item-success">
             @emp.Apellido
-            <a asp-controller="Empleados"
-               asp-action="SessionEmpleadosOk"
-               asp-route-idempleado="@emp.IdEmpleado"
-               class="btn btn-danger">
-                Almacenar!
-            </a>
+            @if (ids == null)
+            {
+                <a asp-controller="Empleados"
+                   asp-action="SessionEmpleadosOk"
+                   asp-route-idempleado="@emp.IdEmpleado">
+                    Almacenar empleado
+                </a>
+            }
+            else
+            {
+                //PREGUNTAMOS SI EL EMPLEADO QUE ESTAMOS DIBUJANDO
+                //ESTA DENTRO DE SESSION
+                if (ids.Contains(emp.IdEmpleado))
+                {
+                    //SI ESTA DENTRO DE SESSION, DIBUJAMOS IMAGEN
+                    <img src="~/images/ok.png" style="width: 35px; height: 35px" />
+                }
+                else
+                {
+                    <a asp-controller="Empleados"
+                       asp-action="SessionEmpleadosOk"
+                       asp-route-idempleado="@emp.IdEmpleado">
+                        Almacenar empleado
+                    </a>
+                }
+            }
         </li>
     }
 </ul>
