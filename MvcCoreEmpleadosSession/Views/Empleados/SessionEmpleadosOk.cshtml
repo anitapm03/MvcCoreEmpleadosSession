@@ -1,13 +1,31 @@
-﻿@model List<Empleado>
+﻿
+@model List<Empleado>
 
 @{
     List<int> ids =
             Context.Session.GetObject<List<int>>("IDSEMPLEADOS");
+
+    List<Empleado> favs = memoryCache.Get<List<Empleado>>("FAV");
 }
 
 <h1>Almacenar obj Empleado en session</h1>
 
+@if (ids != null)
+{
+    <h2 style="color:forestgreen">
+        Empleados en session: @ids.Count
+    </h2>
+}
+
+@if (favs != null)
+{
+    <h2 style="color:forestgreen">
+        Empleados en favs: @favs.Count
+    </h2>
+}
+
 <h2>@ViewData["MENSAJE"]</h2>
+
 
 <a asp-controller="Empleados"
    asp-action="EmpleadosAlmacenadosOk"
@@ -15,13 +33,29 @@
     Ver almacenados!
 </a>
 
+<a asp-controller="Empleados"
+   asp-action="EmpleadosFav"
+   class="btn btn-success">
+    Ver favs!
+</a>
+
 <ul class="list-group">
     @foreach (Empleado emp in Model)
     {
         <li class="list-group-item list-group-item-success">
             @emp.Apellido
+
+
+            <a asp-controller="Empleados"
+               asp-action="SessionEmpleadosOk"
+               class="btn btn-success" 
+               asp-route-idfavorito="@emp.IdEmpleado">
+                Marcar favorito!
+            </a>
+
             @if (ids == null)
             {
+
                 <a asp-controller="Empleados"
                    asp-action="SessionEmpleadosOk"
                    asp-route-idempleado="@emp.IdEmpleado">
