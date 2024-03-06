@@ -9,8 +9,9 @@ namespace MvcCoreEmpleadosSession.Extensions
         {
             string data =
                 JsonConvert.SerializeObject(value);
-            session.SetObject (key, data);
+            session.SetString (key, data);
         }
+
 
         public static T GetObject<T> (this ISession session, string key)
         {

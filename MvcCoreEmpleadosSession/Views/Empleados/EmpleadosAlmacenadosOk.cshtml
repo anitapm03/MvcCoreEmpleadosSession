@@ -1,0 +1,27 @@
+﻿@model List<Empleado>
+
+<h1>Empleados almacenados en session</h1>
+
+<a asp-controller="Empleados"
+   asp-action="SessionEmpleadosOk"
+   class="btn btn-danger">
+    Volver!
+</a>
+
+@if (Model == null)
+{
+    <h2 style="color:red">
+        No hay empleados almacenados
+    </h2>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (Empleado emp in Model)
+        {
+            <li class="list-group-item">
+                @emp.Apellido, @emp.Oficio, @emp.Salario
+            </li>
+        }
+    </ul>
+}
